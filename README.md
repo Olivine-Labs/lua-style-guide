@@ -104,7 +104,7 @@
 
     ```lua
     -- nils don't count
-    local list =  end
+    local list = {}
     list[0] = nil
     list[1] = "item"
 
