@@ -385,10 +385,12 @@
     ```lua
     --bad
     local full_name = function(first, last)
+      local name
+
       if first and last then
-        local name = first .. " " .. last
+        name = first .. " " .. last
       else
-        local name = "John Smith"
+        name = "John Smith"
       end
 
       return name
