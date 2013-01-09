@@ -577,14 +577,18 @@
 
     ```lua
     -- bad
-    local once = 1
-      , upon = 2
-      , aTime = 3
+    local thing = {
+      once = 1
+    , upon = 2
+    , aTime = 3
+    }
 
     -- good
-    local once = 1,
-        upon = 2,
-        aTime = 3
+    local thing = {
+      once = 1,
+      upon = 2,
+      aTime = 3
+    }
 
     -- okay
     local thing = {
