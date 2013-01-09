@@ -104,7 +104,7 @@
 
     ```lua
     -- nils don't count
-    local list =  end
+    local list = {}
     list[0] = nil
     list[1] = "item"
 
@@ -179,7 +179,7 @@
 
     -- good
     local errorMessage = 'This is a super long error that ' ..
-      'was thrown because of Batman.' ..
+      'was thrown because of Batman. ' ..
       'When you stop to think about ' ..
       'how Batman had anything to do ' ..
       'with this, you would get nowhere ' ..
@@ -205,7 +205,7 @@
     end
     ```
 
-  - Never name a parameter `arg`, this will take precendence over the `arg` object that is given to every function scope.
+  - Never name a parameter `arg`, this will take precendence over the `arg` object that is given to every function scope in older versions of Lua.
 
     ```lua
     -- bad
@@ -385,10 +385,12 @@
     ```lua
     --bad
     local full_name = function(first, last)
+      local name
+
       if first and last then
-        local name = first .. " " .. last
+        name = first .. " " .. last
       else
-        local name = "John Smith"
+        name = "John Smith"
       end
 
       return name
@@ -575,14 +577,18 @@
 
     ```lua
     -- bad
-    local once = 1
-      , upon = 2
-      , aTime = 3
+    local thing = {
+      once = 1
+    , upon = 2
+    , aTime = 3
+    }
 
     -- good
-    local once = 1,
-        upon = 2,
-        aTime = 3
+    local thing = {
+      once = 1,
+      upon = 2,
+      aTime = 3
+    }
 
     -- okay
     local thing = {
