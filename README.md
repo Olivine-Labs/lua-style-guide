@@ -205,7 +205,7 @@
     end
     ```
 
-  - Never name a parameter `arg`, this will take precendence over the `arg` object that is given to every function scope.
+  - Never name a parameter `arg`, this will take precendence over the `arg` object that is given to every function scope in older versions of Lua.
 
     ```lua
     -- bad
