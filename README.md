@@ -1,11 +1,20 @@
 # Olivine Labs Lua Style Guide
 
+This stye guide is what we're using internally for Olivine Labs projects, like
+[busted](http://olivinelabs.com/busted),
+[lustache](http://olivinelabs.com/lustache), and others. It does not attempt to
+make arguments for the styles; its goal is to provide consistency across projects
+internally.
+
+Feel free to fork this style guide and change to your own
+liking, and file issues / pull requests if you have questions, comments, or if
+you find any mistakes or typos.
+
+
 ## <a name='TOC'>Table of Contents</a>
 
   1. [Types](#types)
   1. [Tables](#tables)
-  1. [Metatables](#metatables)
-  1. [Arrays](#arrays)
   1. [Strings](#strings)
   1. [Functions](#functions)
   1. [Properties](#properties)
@@ -45,6 +54,7 @@
 
     print(foo, bar) -- => 1	2
     ```
+
   - **Complex**: When you access a complex type you work on a reference to its value
 
     + `table`
@@ -52,7 +62,7 @@
     + `userdata`
 
     ```lua
-    local foo = [1, 2]
+    local foo = { 1, 2 }
     local bar = foo
 
     bar[0] = 9
@@ -132,12 +142,9 @@
 
     **[[⬆]](#TOC)**
 
-## <a name='metatables'>Metatables</a>
-
-
 ## <a name='strings'>Strings</a>
 
-  - Use single quotes `''` for strings
+  - Use single quotes `''` for strings.
 
     ```lua
     -- bad
@@ -153,8 +160,8 @@
     local fullName = 'Bob ' .. self.lastName
     ```
 
-  - Strings longer than 80 characters should be written across multiple lines using concatenation.
-  (Otherwise you'll get a bunch of extra tabs.)
+  - Strings longer than 80 characters should be written across multiple lines 
+    using concatenation. This allows you to indent nicely.
 
     ```lua
     -- bad
@@ -190,8 +197,10 @@
 
 
 ## <a name='functions'>Functions</a>
+  - Prefer lots of small functions to large, complex functions.
 
-  - Prefer function syntax over variable syntax.
+  - Prefer function syntax over variable syntax. This helps differentiate
+    between named and anonymous functions.
 
     ```lua
     -- bad
@@ -214,7 +223,7 @@
     end
 
     -- good
-    local yup = function(name, options, args) 
+    local yup = function(name, options, ...)
       -- ...stuff...
     end
     ```
@@ -242,14 +251,12 @@
     end
     ```
 
-  - Prefer lots of small functions to large complex functions.
-
   **[[⬆]](#TOC)**
 
 
 ## <a name='properties'>Properties</a>
 
-  - Use dot notation when accessing properties.
+  - Use dot notation when accessing known properties.
 
     ```lua
     local luke = {
@@ -273,7 +280,7 @@
       age = 28
     }
 
-    local getProp = function(prop) 
+    local function getProp(prop) 
       return luke[prop]
     end
 
@@ -285,7 +292,8 @@
 
 ## <a name='variables'>Variables</a>
 
-  - Always use `local` to declare variables. Not doing so will result in global variables to avoid polluting the global namespace.
+  - Always use `local` to declare variables. Not doing so will result in
+    global variables to avoid polluting the global namespace.
 
     ```lua
     -- bad
@@ -295,7 +303,8 @@
     local superPower = SuperPower()
     ```
 
-  - Assign variables at the top of their scope. This makes it easier to check for existing variables.
+  - Assign variables at the top of their scope Where possible. This makes it
+    easier to check for existing variables.
 
     ```lua
     -- bad
@@ -315,7 +324,7 @@
     end
 
     -- good
-    local good = function()
+    local function good()
       local name = getName()
 
       test()
@@ -346,7 +355,8 @@
     end
     ```
 
-  - Use shortcuts when you can.
+  - Use shortcuts when you can, unless you need to know the difference between
+    false and nil.
 
     ```lua
     -- bad
@@ -360,7 +370,8 @@
     end
     ```
 
-  - Prefer *true* statements over *false* statements where it makes sense. Prefer truthy priority when writing multiple.
+  - Prefer *true* statements over *false* statements where it makes sense. 
+    Prioritize truthy conditions when writing multiple conditions.
 
     ```lua
     --bad
@@ -384,7 +395,7 @@
 
     ```lua
     --bad
-    local full_name = function(first, last)
+    local function full_name(first, last)
       local name
 
       if first and last then
@@ -397,7 +408,7 @@
     end
 
     --good
-    local full_name = function(first, last)
+    local function full_name(first, last)
       local name = "John Smith"
 
       if first and last then
@@ -428,7 +439,7 @@
 ## <a name='blocks'>Blocks</a>
 
   - Single line blocks are okay for *small* statements. Try to keep lines to 80 characters.
-    Indent if lines overflow.
+    Indent if lines they overflow past the limit.
 
     ```lua
     -- good
@@ -564,7 +575,6 @@
     end
 
     local wat = 7
-
     ```
 
   - Delete unnecessary whitespace at the end of lines.
@@ -573,7 +583,7 @@
 
 ## <a name='commas'>Commas</a>
 
-  - Leading commas aren't okay. Ending commas are okay but discouraged.
+  - Leading commas aren't okay. An ending comma on the last item is okay but discouraged.
 
     ```lua
     -- bad
@@ -603,7 +613,7 @@
 
 ## <a name='semicolons'>Semicolons</a>
 
-  - **Nope.**
+  - **Nope.** Separate statements onto multiple lines.
 
     ```lua
     -- bad
@@ -680,7 +690,7 @@
     ```
 
   - Use snake_case when naming objects, functions, and instances. Tend towards
-    verbosity.
+    verbosity if unsure about naming.
 
     ```lua
     -- bad
@@ -716,12 +726,12 @@
   - Use `is` or `has` for boolean-returning functions that are part of tables.
 
     ```lua
-    --bad 
+    --bad
     local function evil(alignment)
       return alignment < 100
     end
 
-    --good 
+    --good
     local function is_evil(alignment)
       return alignment < 100
     end
@@ -749,7 +759,7 @@
     ```
 
   - Note that modules are [loaded as singletons](http://lua-users.org/wiki/TheEssenceOfLoadingCode)
-    and therefore should usually be factories (a function returning a new instance of a table) 
+    and therefore should usually be factories (a function returning a new instance of a table)
     unless static (like utility libraries.)
 
   **[[⬆]](#TOC)**
@@ -757,22 +767,25 @@
 ## <a name='file-structrure'>File Structure</a>
 
   - Files should be named in all lowercase.
-  - Lua files should be in a top-level `src` folder. The main library file should be called `init.lua`.
+  - Lua files should be in a top-level `src` folder. The main library file should 
+    be called `modulename.lua`.
   - Rockspecs, license, readme, etc should be in the top level.
   - Tests should be in a top-level spec folder.
   - Executables should be in a top-level bin folder.
   - Example:
 
     ```
-    ./my-module
+    ./my_module
       bin/
         script.sh
 
       spec/
         my_module_spec.lua
+        some_file.lua
 
       src/
-        init.lua
+        my_module.lua
+        some_file.lua
 
       README.md
       LICENSE.md
@@ -780,7 +793,34 @@
 
 ## <a name='testing'>Testing</a>
 
-  - Use [busted](olivinelabs.com/busted) and write lots of tests in a /spec folder.
+  - Use [busted](olivinelabs.com/busted) and write lots of tests in a /spec 
+    folder. Separate tests by module.
+  - Use descriptive `describe` and `it` blocks so it's obvious to see what
+    precisely is failing.
+  - Test interfaces. Don't test private methods. If you need to test something
+    that is private, it probably shouldn't be private in the first place.
+  - Example:
+
+    ```
+    ./my_module
+      bin/
+        script.sh
+
+      spec/
+        my_module_spec.lua
+
+        util/
+          formatters_spec.lua
+
+      src/
+        my_module.lua
+
+        util/
+          formatters.lua
+
+      README.md
+      LICENSE.md
+    ```
 
     **[[⬆]](#TOC)**
 
@@ -791,27 +831,7 @@
 
 ## <a name='license'>License</a>
 
-(The MIT License)
-
-Copyright (c) 2012 Olivine Labs
-
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-'Software'), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
-CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+  - Released under CC0 (Public Domain).
+    Information can be found at [http://creativecommons.org/publicdomain/zero/1.0/](http://creativecommons.org/publicdomain/zero/1.0/).
 
 **[[⬆]](#TOC)**
