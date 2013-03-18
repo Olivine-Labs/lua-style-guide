@@ -204,12 +204,12 @@ you find any mistakes or typos.
 
     ```lua
     -- bad
-    local yup = function(name, options)
+    local nope = function(name, options)
       -- ...stuff...
     end
 
     -- good
-    local function nope(name, options)
+    local function yup(name, options)
       -- ...stuff...
     end
     ```
@@ -680,11 +680,6 @@ you find any mistakes or typos.
     ```lua
     --good
     for _, name in pairs(names) do
-      -- ...stuff...
-    end
-
-    --good
-    for k, v in pairs(dudes) do
       -- ...stuff...
     end
     ```
