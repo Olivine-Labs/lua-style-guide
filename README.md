@@ -305,7 +305,7 @@ you find any mistakes or typos.
     local superPower = SuperPower()
     ```
 
-  - Assign variables at the top of their scope Where possible. This makes it
+  - Assign variables at the top of their scope where possible. This makes it
     easier to check for existing variables.
 
     ```lua
