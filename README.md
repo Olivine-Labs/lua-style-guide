@@ -199,7 +199,7 @@ you find any mistakes or typos.
 
 
 ## <a name='functions'>Functions</a>
-  - Prefer lots of small functions to large, complex functions.
+  - Prefer lots of small functions to large, complex functions. [Smalls Functions Are Good For The Universe](http://kikito.github.io/blog/2012/03/16/small-functions-are-good-for-the-universe/).
 
   - Prefer function syntax over variable syntax. This helps differentiate
     between named and anonymous functions.
