@@ -52,7 +52,7 @@ you find any mistakes or typos.
 
     bar = 9
 
-    print(foo, bar) -- => 1	2
+    print(foo, bar) -- => 1	9
     ```
 
   - **Complex**: When you access a complex type you work on a reference to its value
@@ -66,8 +66,11 @@ you find any mistakes or typos.
     local bar = foo
 
     bar[0] = 9
+    foo[1] = 3
 
-    print(foo[0], bar[0]) -- => 9	9
+    print(foo[0], bar[0]) -- => 9   9
+    print(foo[1], bar[1]) -- => 3   3
+    print(foo[2], bar[2]) -- => 2   2		
     ```
 
     **[[⬆]](#TOC)**
@@ -197,7 +200,7 @@ you find any mistakes or typos.
 
 
 ## <a name='functions'>Functions</a>
-  - Prefer lots of small functions to large, complex functions.
+  - Prefer lots of small functions to large, complex functions. [Smalls Functions Are Good For The Universe](http://kikito.github.io/blog/2012/03/16/small-functions-are-good-for-the-universe/).
 
   - Prefer function syntax over variable syntax. This helps differentiate
     between named and anonymous functions.
@@ -218,12 +221,12 @@ you find any mistakes or typos.
 
     ```lua
     -- bad
-    local nope = function(name, options, arg) 
+    local function nope(name, options, arg) 
       -- ...stuff...
     end
 
     -- good
-    local yup = function(name, options, ...)
+    local function yup(name, options, ...)
       -- ...stuff...
     end
     ```
@@ -303,7 +306,7 @@ you find any mistakes or typos.
     local superPower = SuperPower()
     ```
 
-  - Assign variables at the top of their scope Where possible. This makes it
+  - Assign variables at the top of their scope where possible. This makes it
     easier to check for existing variables.
 
     ```lua
