@@ -66,8 +66,10 @@ you find any mistakes or typos.
     local bar = foo
 
     bar[0] = 9
+    foo[1] = 3
 
-    print(foo[0], bar[0]) -- => 9	9
+    print(foo[0], bar[0]) -- => 9   9
+    print(foo[1], bar[1]) -- => 3	3
     ```
 
     **[[⬆]](#TOC)**
