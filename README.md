@@ -52,7 +52,7 @@ you find any mistakes or typos.
 
     bar = 9
 
-    print(foo, bar) -- => 1	2
+    print(foo, bar) -- => 1	9
     ```
 
   - **Complex**: When you access a complex type you work on a reference to its value
