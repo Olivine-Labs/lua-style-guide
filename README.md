@@ -220,12 +220,12 @@ you find any mistakes or typos.
 
     ```lua
     -- bad
-    local nope = function(name, options, arg) 
+    local function nope(name, options, arg) 
       -- ...stuff...
     end
 
     -- good
-    local yup = function(name, options, ...)
+    local function yup(name, options, ...)
       -- ...stuff...
     end
     ```
