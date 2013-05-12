@@ -1,10 +1,8 @@
-# Olivine Labs Lua Style Guide
+# Lua Style Guide
 
-This stye guide is what we're using internally for Olivine Labs projects, like
-[busted](http://olivinelabs.com/busted),
-[lustache](http://olivinelabs.com/lustache), and others. It does not attempt to
-make arguments for the styles; its goal is to provide consistency across projects
-internally.
+This stye guide contains a list of guidelines that we try to follow for our
+projects. It does not attempt to make arguments for the styles; its goal is
+to provide consistency across projects.
 
 Feel free to fork this style guide and change to your own
 liking, and file issues / pull requests if you have questions, comments, or if
@@ -822,10 +820,6 @@ you find any mistakes or typos.
 
     **[[⬆]](#TOC)**
 
-## <a name='authors'>Contributors</a>
-
-  - [View Contributors](https://github.com/Olivine-Labs/lua-style-guide/graphs/contributors)
-  - Adapted from the [Airbnb Javascript Style Guide](https://github.com/airbnb/javascript)
 
 ## <a name='license'>License</a>
 
