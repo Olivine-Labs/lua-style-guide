@@ -1,6 +1,6 @@
 # Lua Style Guide
 
-This stye guide contains a list of guidelines that we try to follow for our
+This style guide contains a list of guidelines that we try to follow for our
 projects. It does not attempt to make arguments for the styles; its goal is
 to provide consistency across projects.
 
