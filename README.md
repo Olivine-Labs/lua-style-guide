@@ -1,6 +1,6 @@
 # Lua Style Guide
 
-This stye guide contains a list of guidelines that we try to follow for our
+This style guide contains a list of guidelines that we try to follow for our
 projects. It does not attempt to make arguments for the styles; its goal is
 to provide consistency across projects.
 
@@ -820,6 +820,11 @@ you find any mistakes or typos.
 
     **[[⬆]](#TOC)**
 
+## <a name='contributors'>Contributors</a>
+
+  - [View contributors](https://github.com/Olivine-Labs/lua-style-guide/graphs/contributors)
+
+    **[[⬆]](#TOC)**
 
 ## <a name='license'>License</a>
 
