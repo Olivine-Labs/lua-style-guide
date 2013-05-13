@@ -820,6 +820,11 @@ you find any mistakes or typos.
 
     **[[⬆]](#TOC)**
 
+## <a name='contributors'>Contributors</a>
+
+  - [View contributors](https://github.com/Olivine-Labs/lua-style-guide/graphs/contributors)
+
+    **[[⬆]](#TOC)**
 
 ## <a name='license'>License</a>
 
