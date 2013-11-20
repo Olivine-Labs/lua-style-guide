@@ -68,7 +68,7 @@ you find any mistakes or typos.
 
     print(foo[0], bar[0]) -- => 9   9
     print(foo[1], bar[1]) -- => 3   3
-    print(foo[2], bar[2]) -- => 2   2		
+    print(foo[2], bar[2]) -- => 2   2
     ```
 
     **[[⬆]](#TOC)**
@@ -95,7 +95,7 @@ you find any mistakes or typos.
     ```lua
     -- bad
     local player = {
-      attack = function() 
+      attack = function()
       -- ...stuff...
       end
     }
@@ -109,35 +109,60 @@ you find any mistakes or typos.
     }
     ```
 
-  - Consider `nil` properties when selecting lengths.
-    A good idea is to store an `n` property on lists that contain the length
+  - The length operator does not work as you may expect on tables that
+    contain `nil`.
+    A good idea is to store an `n` property on lists that contain their length
     (as noted in [Storing Nils in Tables](http://lua-users.org/wiki/StoringNilsInTables))
 
     ```lua
-    -- nils don't count
     local list = {}
-    list[0] = nil
+    list[1] = "item"
+    list[2] = nil
+
+    print(#list) -- 1
+    ```
+
+    ```lua
+    local list = {}
+    list[1] = "item"
+    list[2] = nil
+    list[3] = "item"
+
+    print(#list) -- undefined result
+    ```
+
+  - The length operator always counts from 1. If you store values at negative
+    positions in a table (including 0) they will be ignored.
+
+    ```lua
+    local list = {}
+    list[0] = "item"
     list[1] = "item"
 
-    print(#list) -- 0
-    print(select('#', list)) -- 1
+    print(#list) -- 1
     ```
 
   - When tables have functions, use `self` when referring to itself.
 
     ```lua
     -- bad
+    local fullname = function(this)
+      return this.first_name + " " + this.last_name
+    end
     local me = {
-      fullname = function(this)
-        return this.first_name + " " + this.last_name
-      end
+      fullname = fullname,
+      first_name = "Jack",
+      last_name = "Smith",
     }
 
     -- good
+    local fullname = function(self)
+      return self.first_name + " " + self.last_name
+    end
     local me = {
-      fullname = function(self)
-        return self.first_name + " " + self.last_name
-      end
+      fullname = fullname,
+      first_name = "Jack",
+      last_name = "Smith",
     }
     ```
 
@@ -161,7 +186,7 @@ you find any mistakes or typos.
     local fullName = 'Bob ' .. self.lastName
     ```
 
-  - Strings longer than 80 characters should be written across multiple lines 
+  - Strings longer than 80 characters should be written across multiple lines
     using concatenation. This allows you to indent nicely.
 
     ```lua
@@ -219,7 +244,7 @@ you find any mistakes or typos.
 
     ```lua
     -- bad
-    local function nope(name, options, arg) 
+    local function nope(name, options, arg)
       -- ...stuff...
     end
 
@@ -281,7 +306,7 @@ you find any mistakes or typos.
       age = 28
     }
 
-    local function getProp(prop) 
+    local function getProp(prop)
       return luke[prop]
     end
 
@@ -371,7 +396,7 @@ you find any mistakes or typos.
     end
     ```
 
-  - Prefer *true* statements over *false* statements where it makes sense. 
+  - Prefer *true* statements over *false* statements where it makes sense.
     Prioritize truthy conditions when writing multiple conditions.
 
     ```lua
@@ -458,8 +483,8 @@ you find any mistakes or typos.
     if test < 1 and do_complicated_function(test) == false or
         seven == 8 and nine == 10 then
 
-      do_other_complicated_function() 
-      return false 
+      do_other_complicated_function()
+      return false
     end
     ```
 
@@ -472,17 +497,17 @@ you find any mistakes or typos.
 
     ```lua
     -- bad
-    function() 
+    function()
     ∙∙∙∙local name
     end
 
     -- bad
-    function() 
+    function()
     ∙local name
     end
 
     -- good
-    function() 
+    function()
     ∙∙local name
     end
     ```
@@ -513,14 +538,14 @@ you find any mistakes or typos.
 
     ```lua
     -- bad
-    (function(global) 
+    (function(global)
       -- ...stuff...
     end)(self)
     ```
 
     ```lua
     -- good
-    (function(global) 
+    (function(global)
       -- ...stuff...
     end)(self)
 
@@ -547,11 +572,11 @@ you find any mistakes or typos.
     ```lua
     --bad
     local thing = {1,2,3}
-    thing = {1 , 2 , 3}
-    thing = {1 ,2 ,3}
+    thing = { 1 , 2 , 3 }
+    thing = { 1 ,2 ,3 }
 
     --good
-    local thing = {1, 2, 3}
+    local thing = { 1, 2, 3 }
     ```
 
   - Add a line break after multiline blocks.
@@ -666,12 +691,12 @@ you find any mistakes or typos.
 
     ```lua
     -- bad
-    local function q() 
+    local function q()
       -- ...stuff...
     end
 
     -- good
-    local function query() 
+    local function query()
       -- ..stuff..
     end
     ```
@@ -763,7 +788,7 @@ you find any mistakes or typos.
 ## <a name='file-structrure'>File Structure</a>
 
   - Files should be named in all lowercase.
-  - Lua files should be in a top-level `src` folder. The main library file should 
+  - Lua files should be in a top-level `src` folder. The main library file should
     be called `modulename.lua`.
   - Rockspecs, license, readme, etc should be in the top level.
   - Tests should be in a top-level spec folder.
@@ -789,7 +814,7 @@ you find any mistakes or typos.
 
 ## <a name='testing'>Testing</a>
 
-  - Use [busted](olivinelabs.com/busted) and write lots of tests in a /spec 
+  - Use [busted](olivinelabs.com/busted) and write lots of tests in a /spec
     folder. Separate tests by module.
   - Use descriptive `describe` and `it` blocks so it's obvious to see what
     precisely is failing.
