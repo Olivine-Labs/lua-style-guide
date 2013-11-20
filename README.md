@@ -109,35 +109,60 @@ you find any mistakes or typos.
     }
     ```
 
-  - Consider `nil` properties when selecting lengths.
-    A good idea is to store an `n` property on lists that contain the length
+  - The length operator does not work as you may expect on tables that
+    contain `nil`.
+    A good idea is to store an `n` property on lists that contain their length
     (as noted in [Storing Nils in Tables](http://lua-users.org/wiki/StoringNilsInTables))
 
     ```lua
-    -- nils don't count
     local list = {}
-    list[0] = nil
+    list[1] = "item"
+    list[2] = nil
+
+    print(#list) -- 1
+    ```
+
+    ```lua
+    local list = {}
+    list[1] = "item"
+    list[2] = nil
+    list[3] = "item"
+
+    print(#list) -- undefined result
+    ```
+
+  - The length operator always counts from 1. If you store values at negative
+    positions in a table (including 0) they will be ignored.
+
+    ```lua
+    local list = {}
+    list[0] = "item"
     list[1] = "item"
 
-    print(#list) -- 0
-    print(select('#', list)) -- 1
+    print(#list) -- 1
     ```
 
   - When tables have functions, use `self` when referring to itself.
 
     ```lua
     -- bad
+    local fullname = function(this)
+      return this.first_name + " " + this.last_name
+    end
     local me = {
-      fullname = function(this)
-        return this.first_name + " " + this.last_name
-      end
+      fullname = fullname,
+      first_name = "Jack",
+      last_name = "Smith",
     }
 
     -- good
+    local fullname = function(self)
+      return self.first_name + " " + self.last_name
+    end
     local me = {
-      fullname = function(self)
-        return self.first_name + " " + self.last_name
-      end
+      fullname = fullname,
+      first_name = "Jack",
+      last_name = "Smith",
     }
     ```
 
@@ -547,11 +572,11 @@ you find any mistakes or typos.
     ```lua
     --bad
     local thing = {1,2,3}
-    thing = {1 , 2 , 3}
-    thing = {1 ,2 ,3}
+    thing = { 1 , 2 , 3 }
+    thing = { 1 ,2 ,3 }
 
     --good
-    local thing = {1, 2, 3}
+    local thing = { 1, 2, 3 }
     ```
 
   - Add a line break after multiline blocks.
