@@ -414,7 +414,7 @@ you find any mistakes or typos.
 
       if first and last then
         name = first .. " " .. last
-      else
+      end
 
       return name
     end
