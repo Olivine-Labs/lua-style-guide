@@ -80,13 +80,13 @@ you find any mistakes or typos.
     ```lua
     -- bad
     local player = {}
-    player.name = "Jack"
-    player.class = "Rogue"
+    player.name = 'Jack'
+    player.class = 'Rogue'
 
     -- good
     local player = {
-      name = "Jack",
-      class = "Rogue"
+      name = 'Jack',
+      class = 'Rogue'
     }
     ```
 
@@ -117,7 +117,7 @@ you find any mistakes or typos.
     -- nils don't count
     local list = {}
     list[0] = nil
-    list[1] = "item"
+    list[1] = 'item'
 
     print(#list) -- 0
     print(select('#', list)) -- 1
@@ -129,14 +129,14 @@ you find any mistakes or typos.
     -- bad
     local me = {
       fullname = function(this)
-        return this.first_name + " " + this.last_name
+        return this.first_name + ' ' + this.last_name
       end
     }
 
     -- good
     local me = {
       fullname = function(self)
-        return self.first_name + " " + self.last_name
+        return self.first_name + ' ' + self.last_name
       end
     }
     ```
@@ -349,7 +349,7 @@ you find any mistakes or typos.
   - False and nil are *falsy* in conditional expressions. All else is true.
 
     ```lua
-    local str = ""
+    local str = ''
 
     if str then
       -- true
@@ -400,9 +400,9 @@ you find any mistakes or typos.
       local name
 
       if first and last then
-        name = first .. " " .. last
+        name = first .. ' ' .. last
       else
-        name = "John Smith"
+        name = 'John Smith'
       end
 
       return name
@@ -410,10 +410,10 @@ you find any mistakes or typos.
 
     --good
     local function full_name(first, last)
-      local name = "John Smith"
+      local name = 'John Smith'
 
       if first and last then
-        name = first .. " " .. last
+        name = first .. ' ' .. last
       end
 
       return name
@@ -424,12 +424,12 @@ you find any mistakes or typos.
 
     ```lua
     local function default_name(name)
-      -- return the default "Waldo" if name is nil
-      return name or "Waldo"
+      -- return the default 'Waldo' if name is nil
+      return name or 'Waldo'
     end
 
     local function brew_coffee(machine)
-      return machine and machine.is_loaded and "coffee brewing" or "fill your water"
+      return machine and machine.is_loaded and 'coffee brewing' or 'fill your water'
     end
     ```
 
@@ -533,13 +533,13 @@ you find any mistakes or typos.
     local thing=1
     thing = thing-1
     thing = thing*1
-    thing = "string".."s"
+    thing = 'string'..'s'
 
     -- good
     local thing = 1
     thing = thing - 1
     thing = thing * 1
-    thing = "string" .. "s"
+    thing = 'string' .. 's'
     ```
 
   - Use one space after commas.
@@ -618,11 +618,11 @@ you find any mistakes or typos.
 
     ```lua
     -- bad
-    local whatever = "sure";
+    local whatever = 'sure';
     a = 1; b = 2
 
     -- good
-    local whatever = "sure"
+    local whatever = 'sure'
     a = 1
     b = 2
     ```
@@ -710,11 +710,11 @@ you find any mistakes or typos.
 
     ```lua
     -- bad
-    local player = require("player")
+    local player = require('player')
 
     -- good
-    local Player = require("player")
-    local me = Player({ name = "Jack" })
+    local Player = require('player')
+    local me = Player({ name = 'Jack' })
     ```
 
     **[[⬆]](#TOC)**
