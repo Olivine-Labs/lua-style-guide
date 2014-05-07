@@ -1,0 +1,921 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Lua-style-guide by Olivine-Labs</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1 class="header">Lua-style-guide</h1>
+        <p class="header">Olivine Labs Lua Style Guide</p>
+
+        <ul>
+          <li class="download"><a class="buttons" href="https://github.com/Olivine-Labs/lua-style-guide/zipball/master">Download ZIP</a></li>
+          <li class="download"><a class="buttons" href="https://github.com/Olivine-Labs/lua-style-guide/tarball/master">Download TAR</a></li>
+          <li><a class="buttons github" href="https://github.com/Olivine-Labs/lua-style-guide">View On GitHub</a></li>
+        </ul>
+
+        <p class="header">This project is maintained by <a class="header name" href="https://github.com/Olivine-Labs">Olivine-Labs</a></p>
+
+
+      </header>
+      <section>
+        <h1>
+<a name="lua-style-guide" class="anchor" href="#lua-style-guide"><span class="octicon octicon-link"></span></a>Lua Style Guide</h1>
+
+<p>This style guide contains a list of guidelines that we try to follow for our
+projects. It does not attempt to make arguments for the styles; its goal is
+to provide consistency across projects.</p>
+
+<p>Feel free to fork this style guide and change to your own
+liking, and file issues / pull requests if you have questions, comments, or if
+you find any mistakes or typos.</p>
+
+<h2>
+<a name="table-of-contents" class="anchor" href="#table-of-contents"><span class="octicon octicon-link"></span></a><a name="TOC">Table of Contents</a>
+</h2>
+
+<ol>
+<li><a href="#types">Types</a></li>
+<li><a href="#tables">Tables</a></li>
+<li><a href="#strings">Strings</a></li>
+<li><a href="#functions">Functions</a></li>
+<li><a href="#properties">Properties</a></li>
+<li><a href="#variables">Variables</a></li>
+<li><a href="#conditionals">Conditional Expressions &amp; Equality</a></li>
+<li><a href="#blocks">Blocks</a></li>
+<li><a href="#whitespace">Whitespace</a></li>
+<li><a href="#commas">Commas</a></li>
+<li><a href="#semicolons">Semicolons</a></li>
+<li><a href="#type-coercion">Type Casting &amp; Coercion</a></li>
+<li><a href="#naming-conventions">Naming Conventions</a></li>
+<li><a href="#accessors">Accessors</a></li>
+<li><a href="#constructors">Constructors</a></li>
+<li><a href="#modules">Modules</a></li>
+<li><a href="#file-structure">File Structure</a></li>
+<li><a href="#testing">Testing</a></li>
+<li><a href="#performance">Performance</a></li>
+<li><a href="#resources">Resources</a></li>
+<li><a href="#in-the-wild">In the Wild</a></li>
+<li><a href="#contributors">Contributors</a></li>
+<li><a href="#license">License</a></li>
+</ol><h2>
+<a name="types" class="anchor" href="#types"><span class="octicon octicon-link"></span></a><a name="types">Types</a>
+</h2>
+
+<ul>
+<li>
+<p><strong>Primitives</strong>: When you access a primitive type you work directly on its value</p>
+
+<ul>
+<li><code>string</code></li>
+<li><code>number</code></li>
+<li><code>boolean</code></li>
+<li><code>nil</code></li>
+</ul>
+<div class="highlight highlight-lua"><pre><span class="kd">local</span> <span class="n">foo</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="kd">local</span> <span class="n">bar</span> <span class="o">=</span> <span class="n">foo</span>
+
+<span class="n">bar</span> <span class="o">=</span> <span class="mi">9</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">foo</span><span class="p">,</span> <span class="n">bar</span><span class="p">)</span> <span class="c1">-- =&gt; 1 9</span>
+</pre></div>
+</li>
+<li>
+<p><strong>Complex</strong>: When you access a complex type you work on a reference to its value</p>
+
+<ul>
+<li><code>table</code></li>
+<li><code>function</code></li>
+<li><code>userdata</code></li>
+</ul>
+<div class="highlight highlight-lua"><pre><span class="kd">local</span> <span class="n">foo</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span> <span class="p">}</span>
+<span class="kd">local</span> <span class="n">bar</span> <span class="o">=</span> <span class="n">foo</span>
+
+<span class="n">bar</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">9</span>
+<span class="n">foo</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">foo</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">bar</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="c1">-- =&gt; 9   9</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">foo</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">bar</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="c1">-- =&gt; 3   3</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">foo</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">bar</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="c1">-- =&gt; 2   2       </span>
+</pre></div>
+
+<p><strong><a href="#TOC">[⬆]</a></strong></p>
+</li>
+</ul><h2>
+<a name="tables" class="anchor" href="#tables"><span class="octicon octicon-link"></span></a><a name="tables">Tables</a>
+</h2>
+
+<ul>
+<li>
+<p>Use the constructor syntax for table property creation where possible.</p>
+
+<div class="highlight highlight-lua"><pre><span class="c1">-- bad</span>
+<span class="kd">local</span> <span class="n">player</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">player</span><span class="p">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">'</span><span class="s">Jack'</span>
+<span class="n">player</span><span class="p">.</span><span class="n">class</span> <span class="o">=</span> <span class="s1">'</span><span class="s">Rogue'</span>
+
+<span class="c1">-- good</span>
+<span class="kd">local</span> <span class="n">player</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="n">name</span> <span class="o">=</span> <span class="s1">'</span><span class="s">Jack'</span><span class="p">,</span>
+  <span class="n">class</span> <span class="o">=</span> <span class="s1">'</span><span class="s">Rogue'</span>
+<span class="p">}</span>
+</pre></div>
+</li>
+<li>
+<p>Define functions externally to table definition.</p>
+
+<div class="highlight highlight-lua"><pre><span class="c1">-- bad</span>
+<span class="kd">local</span> <span class="n">player</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="n">attack</span> <span class="o">=</span> <span class="k">function</span><span class="p">()</span> 
+  <span class="c1">-- ...stuff...</span>
+  <span class="k">end</span>
+<span class="p">}</span>
+
+<span class="c1">-- good</span>
+<span class="kd">local</span> <span class="k">function</span> <span class="nf">attack</span><span class="p">()</span>
+<span class="k">end</span>
+
+<span class="kd">local</span> <span class="n">player</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="n">attack</span> <span class="o">=</span> <span class="n">attack</span>
+<span class="p">}</span>
+</pre></div>
+</li>
+<li>
+<p>Consider <code>nil</code> properties when selecting lengths.
+A good idea is to store an <code>n</code> property on lists that contain the length
+(as noted in <a href="http://lua-users.org/wiki/StoringNilsInTables">Storing Nils in Tables</a>)</p>
+
+<div class="highlight highlight-lua"><pre><span class="c1">-- nils don't count</span>
+<span class="kd">local</span> <span class="n">list</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="kc">nil</span>
+<span class="n">list</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'</span><span class="s">item'</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="o">#</span><span class="n">list</span><span class="p">)</span> <span class="c1">-- 0</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">select</span><span class="p">(</span><span class="s1">'</span><span class="s">#'</span><span class="p">,</span> <span class="n">list</span><span class="p">))</span> <span class="c1">-- 1</span>
+</pre></div>
+</li>
+<li>
+<p>When tables have functions, use <code>self</code> when referring to itself.</p>
+
+<div class="highlight highlight-lua"><pre><span class="c1">-- bad</span>
+<span class="kd">local</span> <span class="n">me</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="n">fullname</span> <span class="o">=</span> <span class="k">function</span><span class="p">(</span><span class="n">this</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">this</span><span class="p">.</span><span class="n">first_name</span> <span class="o">+</span> <span class="s1">'</span><span class="s"> '</span> <span class="o">+</span> <span class="n">this</span><span class="p">.</span><span class="n">last_name</span>
+  <span class="k">end</span>
+<span class="p">}</span>
+
+<span class="c1">-- good</span>
+<span class="kd">local</span> <span class="n">me</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="n">fullname</span> <span class="o">=</span> <span class="k">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="n">first_name</span> <span class="o">+</span> <span class="s1">'</span><span class="s"> '</span> <span class="o">+</span> <span class="n">self</span><span class="p">.</span><span class="n">last_name</span>
+  <span class="k">end</span>
+<span class="p">}</span>
+</pre></div>
+
+<p><strong><a href="#TOC">[⬆]</a></strong></p>
+</li>
+</ul><h2>
+<a name="strings" class="anchor" href="#strings"><span class="octicon octicon-link"></span></a><a name="strings">Strings</a>
+</h2>
+
+<ul>
+<li>
+<p>Use single quotes <code>''</code> for strings.</p>
+
+<div class="highlight highlight-lua"><pre><span class="c1">-- bad</span>
+<span class="kd">local</span> <span class="n">name</span> <span class="o">=</span> <span class="s2">"</span><span class="s">Bob Parr"</span>
+
+<span class="c1">-- good</span>
+<span class="kd">local</span> <span class="n">name</span> <span class="o">=</span> <span class="s1">'</span><span class="s">Bob Parr'</span>
+
+<span class="c1">-- bad</span>
+<span class="kd">local</span> <span class="n">fullName</span> <span class="o">=</span> <span class="s2">"</span><span class="s">Bob "</span> <span class="o">..</span> <span class="n">self</span><span class="p">.</span><span class="n">lastName</span>
+
+<span class="c1">-- good</span>
+<span class="kd">local</span> <span class="n">fullName</span> <span class="o">=</span> <span class="s1">'</span><span class="s">Bob '</span> <span class="o">..</span> <span class="n">self</span><span class="p">.</span><span class="n">lastName</span>
+</pre></div>
+</li>
+<li>
+<p>Strings longer than 80 characters should be written across multiple lines 
+using concatenation. This allows you to indent nicely.</p>
+
+<div class="highlight highlight-lua"><pre><span class="c1">-- bad</span>
+<span class="kd">local</span> <span class="n">errorMessage</span> <span class="o">=</span> <span class="s1">'</span><span class="s">This is a super long error that was thrown because of Batman. When you stop to think about how Batman had anything to do with this, you would get nowhere fast.'</span>
+
+<span class="c1">-- bad</span>
+<span class="kd">local</span> <span class="n">errorMessage</span> <span class="o">=</span> <span class="s1">'</span><span class="s">This is a super long error that \</span>
+<span class="n">was</span> <span class="n">thrown</span> <span class="n">because</span> <span class="n">of</span> <span class="n">Batman</span><span class="p">.</span> <span class="err">\</span>
+<span class="n">When</span> <span class="n">you</span> <span class="n">stop</span> <span class="n">to</span> <span class="n">think</span> <span class="n">about</span> <span class="err">\</span>
+<span class="n">how</span> <span class="n">Batman</span> <span class="n">had</span> <span class="n">anything</span> <span class="n">to</span> <span class="k">do</span> <span class="err">\</span>
+<span class="n">with</span> <span class="n">this</span><span class="p">,</span> <span class="n">you</span> <span class="n">would</span> <span class="n">get</span> <span class="n">nowhere</span> <span class="err">\</span>
+<span class="n">fast</span><span class="p">.</span><span class="s1">'</span>
+
+<span class="c1">-- bad</span>
+<span class="kd">local</span> <span class="n">errorMessage</span> <span class="o">=</span> <span class="s">[[This is a super long error that</span>
+<span class="s">  was thrown because of Batman.</span>
+<span class="s">  When you stop to think about</span>
+<span class="s">  how Batman had anything to do</span>
+<span class="s">  with this, you would get nowhere</span>
+<span class="s">  fast.]]</span>
+
+<span class="c1">-- good</span>
+<span class="kd">local</span> <span class="n">errorMessage</span> <span class="o">=</span> <span class="s1">'</span><span class="s">This is a super long error that '</span> <span class="o">..</span>
+  <span class="s1">'</span><span class="s">was thrown because of Batman. '</span> <span class="o">..</span>
+  <span class="s1">'</span><span class="s">When you stop to think about '</span> <span class="o">..</span>
+  <span class="s1">'</span><span class="s">how Batman had anything to do '</span> <span class="o">..</span>
+  <span class="s1">'</span><span class="s">with this, you would get nowhere '</span> <span class="o">..</span>
+  <span class="s1">'</span><span class="s">fast.'</span>
+</pre></div>
+
+<p><strong><a href="#TOC">[⬆]</a></strong></p>
+</li>
+</ul><h2>
+<a name="functions" class="anchor" href="#functions"><span class="octicon octicon-link"></span></a><a name="functions">Functions</a>
+</h2>
+
+<ul>
+<li><p>Prefer lots of small functions to large, complex functions. <a href="http://kikito.github.io/blog/2012/03/16/small-functions-are-good-for-the-universe/">Smalls Functions Are Good For The Universe</a>.</p></li>
+<li>
+<p>Prefer function syntax over variable syntax. This helps differentiate
+between named and anonymous functions.</p>
+
+<div class="highlight highlight-lua"><pre><span class="c1">-- bad</span>
+<span class="kd">local</span> <span class="n">nope</span> <span class="o">=</span> <span class="k">function</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+  <span class="c1">-- ...stuff...</span>
+<span class="k">end</span>
+
+<span class="c1">-- good</span>
+<span class="kd">local</span> <span class="k">function</span> <span class="nf">yup</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+  <span class="c1">-- ...stuff...</span>
+<span class="k">end</span>
+</pre></div>
+</li>
+<li>
+<p>Never name a parameter <code>arg</code>, this will take precendence over the <code>arg</code> object that is given to every function scope in older versions of Lua.</p>
+
+<div class="highlight highlight-lua"><pre><span class="c1">-- bad</span>
+<span class="kd">local</span> <span class="k">function</span> <span class="nf">nope</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span> <span class="n">arg</span><span class="p">)</span> 
+  <span class="c1">-- ...stuff...</span>
+<span class="k">end</span>
+
+<span class="c1">-- good</span>
+<span class="kd">local</span> <span class="k">function</span> <span class="nf">yup</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+  <span class="c1">-- ...stuff...</span>
+<span class="k">end</span>
+</pre></div>
+</li>
+<li>
+<p>Perform validation early and return as early as possible.</p>
+
+<div class="highlight highlight-lua"><pre><span class="c1">-- bad</span>
+<span class="kd">local</span> <span class="n">is_good_name</span> <span class="o">=</span> <span class="k">function</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span> <span class="n">arg</span><span class="p">)</span>
+  <span class="kd">local</span> <span class="n">is_good</span> <span class="o">=</span> <span class="o">#</span><span class="n">name</span> <span class="o">&gt;</span> <span class="mi">3</span>
+  <span class="n">is_good</span> <span class="o">=</span> <span class="n">is_good</span> <span class="ow">and</span> <span class="o">#</span><span class="n">name</span> <span class="o">&lt;</span> <span class="mi">30</span>
+
+  <span class="c1">-- ...stuff...</span>
+
+  <span class="k">return</span> <span class="n">is_bad</span>
+<span class="k">end</span>
+
+<span class="c1">-- good</span>
+<span class="kd">local</span> <span class="n">is_good_name</span> <span class="o">=</span> <span class="k">function</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+  <span class="k">if</span> <span class="o">#</span><span class="n">name</span> <span class="o">&lt;</span> <span class="mi">3</span> <span class="ow">or</span> <span class="o">#</span><span class="n">name</span> <span class="o">&gt;</span> <span class="mi">30</span> <span class="k">then</span> <span class="k">return</span> <span class="kc">false</span> <span class="k">end</span>
+
+  <span class="c1">-- ...stuff...</span>
+
+  <span class="k">return</span> <span class="kc">true</span>
+<span class="k">end</span>
+</pre></div>
+
+<p><strong><a href="#TOC">[⬆]</a></strong></p>
+</li>
+</ul><h2>
+<a name="properties" class="anchor" href="#properties"><span class="octicon octicon-link"></span></a><a name="properties">Properties</a>
+</h2>
+
+<ul>
+<li>
+<p>Use dot notation when accessing known properties.</p>
+
+<div class="highlight highlight-lua"><pre><span class="kd">local</span> <span class="n">luke</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="n">jedi</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span>
+  <span class="n">age</span> <span class="o">=</span> <span class="mi">28</span>
+<span class="p">}</span>
+
+<span class="c1">-- bad</span>
+<span class="kd">local</span> <span class="n">isJedi</span> <span class="o">=</span> <span class="n">luke</span><span class="p">[</span><span class="s1">'</span><span class="s">jedi'</span><span class="p">]</span>
+
+<span class="c1">-- good</span>
+<span class="kd">local</span> <span class="n">isJedi</span> <span class="o">=</span> <span class="n">luke</span><span class="p">.</span><span class="n">jedi</span>
+</pre></div>
+</li>
+<li>
+<p>Use subscript notation <code>[]</code> when accessing properties with a variable
+or if using a table as a list.</p>
+
+<div class="highlight highlight-lua"><pre><span class="kd">local</span> <span class="n">luke</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="n">jedi</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span>
+  <span class="n">age</span> <span class="o">=</span> <span class="mi">28</span>
+<span class="p">}</span>
+
+<span class="kd">local</span> <span class="k">function</span> <span class="nf">getProp</span><span class="p">(</span><span class="n">prop</span><span class="p">)</span> 
+  <span class="k">return</span> <span class="n">luke</span><span class="p">[</span><span class="n">prop</span><span class="p">]</span>
+<span class="k">end</span>
+
+<span class="kd">local</span> <span class="n">isJedi</span> <span class="o">=</span> <span class="n">getProp</span><span class="p">(</span><span class="s1">'</span><span class="s">jedi'</span><span class="p">)</span>
+</pre></div>
+
+<p><strong><a href="#TOC">[⬆]</a></strong></p>
+</li>
+</ul><h2>
+<a name="variables" class="anchor" href="#variables"><span class="octicon octicon-link"></span></a><a name="variables">Variables</a>
+</h2>
+
+<ul>
+<li>
+<p>Always use <code>local</code> to declare variables. Not doing so will result in
+global variables to avoid polluting the global namespace.</p>
+
+<div class="highlight highlight-lua"><pre><span class="c1">-- bad</span>
+<span class="n">superPower</span> <span class="o">=</span> <span class="n">SuperPower</span><span class="p">()</span>
+
+<span class="c1">-- good</span>
+<span class="kd">local</span> <span class="n">superPower</span> <span class="o">=</span> <span class="n">SuperPower</span><span class="p">()</span>
+</pre></div>
+</li>
+<li>
+<p>Assign variables at the top of their scope where possible. This makes it
+easier to check for existing variables.</p>
+
+<div class="highlight highlight-lua"><pre><span class="c1">-- bad</span>
+<span class="kd">local</span> <span class="n">bad</span> <span class="o">=</span> <span class="k">function</span><span class="p">()</span>
+  <span class="n">test</span><span class="p">()</span>
+  <span class="nb">print</span><span class="p">(</span><span class="s1">'</span><span class="s">doing stuff..'</span><span class="p">)</span>
+
+  <span class="o">//..</span><span class="n">other</span> <span class="n">stuff</span><span class="o">..</span>
+
+  <span class="kd">local</span> <span class="n">name</span> <span class="o">=</span> <span class="n">getName</span><span class="p">()</span>
+
+  <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">'</span><span class="s">test'</span> <span class="k">then</span>
+    <span class="k">return</span> <span class="kc">false</span>
+  <span class="k">end</span>
+
+  <span class="k">return</span> <span class="n">name</span>
+<span class="k">end</span>
+
+<span class="c1">-- good</span>
+<span class="kd">local</span> <span class="k">function</span> <span class="nf">good</span><span class="p">()</span>
+  <span class="kd">local</span> <span class="n">name</span> <span class="o">=</span> <span class="n">getName</span><span class="p">()</span>
+
+  <span class="n">test</span><span class="p">()</span>
+  <span class="nb">print</span><span class="p">(</span><span class="s1">'</span><span class="s">doing stuff..'</span><span class="p">)</span>
+
+  <span class="o">//..</span><span class="n">other</span> <span class="n">stuff</span><span class="o">..</span>
+
+  <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">'</span><span class="s">test'</span> <span class="k">then</span>
+    <span class="k">return</span> <span class="kc">false</span>
+  <span class="k">end</span>
+
+  <span class="k">return</span> <span class="n">name</span>
+<span class="k">end</span>
+</pre></div>
+
+<p><strong><a href="#TOC">[⬆]</a></strong></p>
+</li>
+</ul><h2>
+<a name="conditional-expressions--equality" class="anchor" href="#conditional-expressions--equality"><span class="octicon octicon-link"></span></a><a name="conditionals">Conditional Expressions &amp; Equality</a>
+</h2>
+
+<ul>
+<li>
+<p>False and nil are <em>falsy</em> in conditional expressions. All else is true.</p>
+
+<div class="highlight highlight-lua"><pre><span class="kd">local</span> <span class="n">str</span> <span class="o">=</span> <span class="s1">'</span><span class="s">'</span>
+
+<span class="k">if</span> <span class="n">str</span> <span class="k">then</span>
+  <span class="c1">-- true</span>
+<span class="k">end</span>
+</pre></div>
+</li>
+<li>
+<p>Use shortcuts when you can, unless you need to know the difference between
+false and nil.</p>
+
+<div class="highlight highlight-lua"><pre><span class="c1">-- bad</span>
+<span class="k">if</span> <span class="n">name</span> <span class="o">~=</span> <span class="kc">nil</span> <span class="k">then</span>
+  <span class="c1">-- ...stuff...</span>
+<span class="k">end</span>
+
+<span class="c1">-- good</span>
+<span class="k">if</span> <span class="n">name</span> <span class="k">then</span>
+  <span class="c1">-- ...stuff...</span>
+<span class="k">end</span>
+</pre></div>
+</li>
+<li>
+<p>Prefer <em>true</em> statements over <em>false</em> statements where it makes sense. 
+Prioritize truthy conditions when writing multiple conditions.</p>
+
+<div class="highlight highlight-lua"><pre><span class="c1">--bad</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">thing</span> <span class="k">then</span>
+  <span class="c1">-- ...stuff...</span>
+<span class="k">else</span>
+  <span class="c1">-- ...stuff...</span>
+<span class="k">end</span>
+
+<span class="c1">--good</span>
+<span class="k">if</span> <span class="n">thing</span> <span class="k">then</span>
+  <span class="c1">-- ...stuff...</span>
+<span class="k">else</span>
+  <span class="c1">-- ...stuff...</span>
+<span class="k">end</span>
+</pre></div>
+</li>
+<li>
+<p>Prefer defaults to <code>else</code> statements where it makes sense. This results in
+less complex and safer code at the expense of variable reassignment, so
+situations may differ.</p>
+
+<div class="highlight highlight-lua"><pre><span class="c1">--bad</span>
+<span class="kd">local</span> <span class="k">function</span> <span class="nf">full_name</span><span class="p">(</span><span class="n">first</span><span class="p">,</span> <span class="n">last</span><span class="p">)</span>
+  <span class="kd">local</span> <span class="n">name</span>
+
+  <span class="k">if</span> <span class="n">first</span> <span class="ow">and</span> <span class="n">last</span> <span class="k">then</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">first</span> <span class="o">..</span> <span class="s1">'</span><span class="s"> '</span> <span class="o">..</span> <span class="n">last</span>
+  <span class="k">else</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s1">'</span><span class="s">John Smith'</span>
+  <span class="k">end</span>
+
+  <span class="k">return</span> <span class="n">name</span>
+<span class="k">end</span>
+
+<span class="c1">--good</span>
+<span class="kd">local</span> <span class="k">function</span> <span class="nf">full_name</span><span class="p">(</span><span class="n">first</span><span class="p">,</span> <span class="n">last</span><span class="p">)</span>
+  <span class="kd">local</span> <span class="n">name</span> <span class="o">=</span> <span class="s1">'</span><span class="s">John Smith'</span>
+
+  <span class="k">if</span> <span class="n">first</span> <span class="ow">and</span> <span class="n">last</span> <span class="k">then</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">first</span> <span class="o">..</span> <span class="s1">'</span><span class="s"> '</span> <span class="o">..</span> <span class="n">last</span>
+  <span class="k">end</span>
+
+  <span class="k">return</span> <span class="n">name</span>
+<span class="k">end</span>
+</pre></div>
+</li>
+<li>
+<p>Short ternaries are okay.</p>
+
+<div class="highlight highlight-lua"><pre><span class="kd">local</span> <span class="k">function</span> <span class="nf">default_name</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+  <span class="c1">-- return the default 'Waldo' if name is nil</span>
+  <span class="k">return</span> <span class="n">name</span> <span class="ow">or</span> <span class="s1">'</span><span class="s">Waldo'</span>
+<span class="k">end</span>
+
+<span class="kd">local</span> <span class="k">function</span> <span class="nf">brew_coffee</span><span class="p">(</span><span class="n">machine</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">machine</span> <span class="ow">and</span> <span class="n">machine</span><span class="p">.</span><span class="n">is_loaded</span> <span class="ow">and</span> <span class="s1">'</span><span class="s">coffee brewing'</span> <span class="ow">or</span> <span class="s1">'</span><span class="s">fill your water'</span>
+<span class="k">end</span>
+</pre></div>
+
+<p><strong><a href="#TOC">[⬆]</a></strong></p>
+</li>
+</ul><h2>
+<a name="blocks" class="anchor" href="#blocks"><span class="octicon octicon-link"></span></a><a name="blocks">Blocks</a>
+</h2>
+
+<ul>
+<li>
+<p>Single line blocks are okay for <em>small</em> statements. Try to keep lines to 80 characters.
+Indent if lines they overflow past the limit.</p>
+
+<div class="highlight highlight-lua"><pre><span class="c1">-- good</span>
+<span class="k">if</span> <span class="n">test</span> <span class="k">then</span> <span class="k">return</span> <span class="kc">false</span> <span class="k">end</span>
+
+<span class="c1">-- good</span>
+<span class="k">if</span> <span class="n">test</span> <span class="k">then</span>
+  <span class="k">return</span> <span class="kc">false</span>
+<span class="k">end</span>
+
+<span class="c1">-- bad</span>
+<span class="k">if</span> <span class="n">test</span> <span class="o">&lt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">do_complicated_function</span><span class="p">(</span><span class="n">test</span><span class="p">)</span> <span class="o">==</span> <span class="kc">false</span> <span class="ow">or</span> <span class="n">seven</span> <span class="o">==</span> <span class="mi">8</span> <span class="ow">and</span> <span class="n">nine</span> <span class="o">==</span> <span class="mi">10</span> <span class="k">then</span> <span class="n">do_other_complicated_function</span><span class="p">()</span><span class="k">end</span>
+
+<span class="c1">-- good</span>
+<span class="k">if</span> <span class="n">test</span> <span class="o">&lt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">do_complicated_function</span><span class="p">(</span><span class="n">test</span><span class="p">)</span> <span class="o">==</span> <span class="kc">false</span> <span class="ow">or</span>
+    <span class="n">seven</span> <span class="o">==</span> <span class="mi">8</span> <span class="ow">and</span> <span class="n">nine</span> <span class="o">==</span> <span class="mi">10</span> <span class="k">then</span>
+
+  <span class="n">do_other_complicated_function</span><span class="p">()</span> 
+  <span class="k">return</span> <span class="kc">false</span> 
+<span class="k">end</span>
+</pre></div>
+
+<p><strong><a href="#TOC">[⬆]</a></strong></p>
+</li>
+</ul><h2>
+<a name="whitespace" class="anchor" href="#whitespace"><span class="octicon octicon-link"></span></a><a name="whitespace">Whitespace</a>
+</h2>
+
+<ul>
+<li>
+<p>Use soft tabs set to 2 spaces. Tab characters and 4-space tabs result in public flogging.</p>
+
+<div class="highlight highlight-lua"><pre><span class="c1">-- bad</span>
+<span class="k">function</span><span class="p">()</span> 
+<span class="err">∙∙∙∙</span><span class="kd">local</span> <span class="n">name</span>
+<span class="k">end</span>
+
+<span class="c1">-- bad</span>
+<span class="k">function</span><span class="p">()</span> 
+<span class="err">∙</span><span class="kd">local</span> <span class="n">name</span>
+<span class="k">end</span>
+
+<span class="c1">-- good</span>
+<span class="k">function</span><span class="p">()</span> 
+<span class="err">∙∙</span><span class="kd">local</span> <span class="n">name</span>
+<span class="k">end</span>
+</pre></div>
+</li>
+<li>
+<p>Place 1 space before opening and closing braces. Place no spaces around parens.</p>
+
+<div class="highlight highlight-lua"><pre><span class="c1">-- bad</span>
+<span class="kd">local</span> <span class="n">test</span> <span class="o">=</span> <span class="p">{</span><span class="n">one</span><span class="o">=</span><span class="mi">1</span><span class="p">}</span>
+
+<span class="c1">-- good</span>
+<span class="kd">local</span> <span class="n">test</span> <span class="o">=</span> <span class="p">{</span> <span class="n">one</span> <span class="o">=</span> <span class="mi">1</span> <span class="p">}</span>
+
+<span class="c1">-- bad</span>
+<span class="n">dog</span><span class="p">.</span><span class="n">set</span><span class="p">(</span><span class="s1">'</span><span class="s">attr'</span><span class="p">,{</span>
+  <span class="n">age</span> <span class="o">=</span> <span class="s1">'</span><span class="s">1 year'</span><span class="p">,</span>
+  <span class="n">breed</span> <span class="o">=</span> <span class="s1">'</span><span class="s">Bernese Mountain Dog'</span>
+<span class="p">})</span>
+
+<span class="c1">-- good</span>
+<span class="n">dog</span><span class="p">.</span><span class="n">set</span><span class="p">(</span><span class="s1">'</span><span class="s">attr'</span><span class="p">,</span> <span class="p">{</span>
+  <span class="n">age</span> <span class="o">=</span> <span class="s1">'</span><span class="s">1 year'</span><span class="p">,</span>
+  <span class="n">breed</span> <span class="o">=</span> <span class="s1">'</span><span class="s">Bernese Mountain Dog'</span>
+<span class="p">})</span>
+</pre></div>
+</li>
+<li>
+<p>Place an empty newline at the end of the file.</p>
+
+<div class="highlight highlight-lua"><pre><span class="c1">-- bad</span>
+<span class="p">(</span><span class="k">function</span><span class="p">(</span><span class="n">global</span><span class="p">)</span> 
+  <span class="c1">-- ...stuff...</span>
+<span class="k">end</span><span class="p">)(</span><span class="n">self</span><span class="p">)</span>
+</pre></div>
+
+<div class="highlight highlight-lua"><pre><span class="c1">-- good</span>
+<span class="p">(</span><span class="k">function</span><span class="p">(</span><span class="n">global</span><span class="p">)</span> 
+  <span class="c1">-- ...stuff...</span>
+<span class="k">end</span><span class="p">)(</span><span class="n">self</span><span class="p">)</span>
+
+</pre></div>
+</li>
+<li>
+<p>Surround operators with spaces.</p>
+
+<div class="highlight highlight-lua"><pre><span class="c1">-- bad</span>
+<span class="kd">local</span> <span class="n">thing</span><span class="o">=</span><span class="mi">1</span>
+<span class="n">thing</span> <span class="o">=</span> <span class="n">thing</span><span class="o">-</span><span class="mi">1</span>
+<span class="n">thing</span> <span class="o">=</span> <span class="n">thing</span><span class="o">*</span><span class="mi">1</span>
+<span class="n">thing</span> <span class="o">=</span> <span class="s1">'</span><span class="s">string'</span><span class="o">..</span><span class="s1">'</span><span class="s">s'</span>
+
+<span class="c1">-- good</span>
+<span class="kd">local</span> <span class="n">thing</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">thing</span> <span class="o">=</span> <span class="n">thing</span> <span class="o">-</span> <span class="mi">1</span>
+<span class="n">thing</span> <span class="o">=</span> <span class="n">thing</span> <span class="o">*</span> <span class="mi">1</span>
+<span class="n">thing</span> <span class="o">=</span> <span class="s1">'</span><span class="s">string'</span> <span class="o">..</span> <span class="s1">'</span><span class="s">s'</span>
+</pre></div>
+</li>
+<li>
+<p>Use one space after commas.</p>
+
+<div class="highlight highlight-lua"><pre><span class="c1">--bad</span>
+<span class="kd">local</span> <span class="n">thing</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">}</span>
+<span class="n">thing</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span> <span class="p">,</span> <span class="mi">2</span> <span class="p">,</span> <span class="mi">3</span><span class="p">}</span>
+<span class="n">thing</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span> <span class="p">,</span><span class="mi">2</span> <span class="p">,</span><span class="mi">3</span><span class="p">}</span>
+
+<span class="c1">--good</span>
+<span class="kd">local</span> <span class="n">thing</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">}</span>
+</pre></div>
+</li>
+<li>
+<p>Add a line break after multiline blocks.</p>
+
+<div class="highlight highlight-lua"><pre><span class="c1">--bad</span>
+<span class="k">if</span> <span class="n">thing</span> <span class="k">then</span>
+  <span class="c1">-- ...stuff...</span>
+<span class="k">end</span>
+<span class="k">function</span> <span class="nf">derp</span><span class="p">()</span>
+  <span class="c1">-- ...stuff...</span>
+<span class="k">end</span>
+<span class="kd">local</span> <span class="n">wat</span> <span class="o">=</span> <span class="mi">7</span>
+
+<span class="c1">--good</span>
+<span class="k">if</span> <span class="n">thing</span> <span class="k">then</span>
+  <span class="c1">-- ...stuff...</span>
+<span class="k">end</span>
+
+<span class="k">function</span> <span class="nf">derp</span><span class="p">()</span>
+  <span class="c1">-- ...stuff...</span>
+<span class="k">end</span>
+
+<span class="kd">local</span> <span class="n">wat</span> <span class="o">=</span> <span class="mi">7</span>
+</pre></div>
+</li>
+<li>
+<p>Delete unnecessary whitespace at the end of lines.</p>
+
+<p><strong><a href="#TOC">[⬆]</a></strong></p>
+</li>
+</ul><h2>
+<a name="commas" class="anchor" href="#commas"><span class="octicon octicon-link"></span></a><a name="commas">Commas</a>
+</h2>
+
+<ul>
+<li>
+<p>Leading commas aren't okay. An ending comma on the last item is okay but discouraged.</p>
+
+<div class="highlight highlight-lua"><pre><span class="c1">-- bad</span>
+<span class="kd">local</span> <span class="n">thing</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="n">once</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="p">,</span> <span class="n">upon</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="p">,</span> <span class="n">aTime</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="p">}</span>
+
+<span class="c1">-- good</span>
+<span class="kd">local</span> <span class="n">thing</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="n">once</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+  <span class="n">upon</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+  <span class="n">aTime</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="p">}</span>
+
+<span class="c1">-- okay</span>
+<span class="kd">local</span> <span class="n">thing</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="n">once</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+  <span class="n">upon</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+  <span class="n">aTime</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+
+<p><strong><a href="#TOC">[⬆]</a></strong></p>
+</li>
+</ul><h2>
+<a name="semicolons" class="anchor" href="#semicolons"><span class="octicon octicon-link"></span></a><a name="semicolons">Semicolons</a>
+</h2>
+
+<ul>
+<li>
+<p><strong>Nope.</strong> Separate statements onto multiple lines.</p>
+
+<div class="highlight highlight-lua"><pre><span class="c1">-- bad</span>
+<span class="kd">local</span> <span class="n">whatever</span> <span class="o">=</span> <span class="s1">'</span><span class="s">sure'</span><span class="p">;</span>
+<span class="n">a</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">2</span>
+
+<span class="c1">-- good</span>
+<span class="kd">local</span> <span class="n">whatever</span> <span class="o">=</span> <span class="s1">'</span><span class="s">sure'</span>
+<span class="n">a</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">b</span> <span class="o">=</span> <span class="mi">2</span>
+</pre></div>
+
+<p><strong><a href="#TOC">[⬆]</a></strong></p>
+</li>
+</ul><h2>
+<a name="type-casting--coercion" class="anchor" href="#type-casting--coercion"><span class="octicon octicon-link"></span></a><a name="type-coercion">Type Casting &amp; Coercion</a>
+</h2>
+
+<ul>
+<li><p>Perform type coercion at the beginning of the statement. Use the built-in functions. (<code>tostring</code>, <code>tonumber</code>, etc.)</p></li>
+<li>
+<p>Use <code>tostring</code> for strings if you need to cast without string concatenation.</p>
+
+<div class="highlight highlight-lua"><pre><span class="c1">-- bad</span>
+<span class="kd">local</span> <span class="n">totalScore</span> <span class="o">=</span> <span class="n">reviewScore</span> <span class="o">..</span> <span class="s1">'</span><span class="s">'</span>
+
+<span class="c1">-- good</span>
+<span class="kd">local</span> <span class="n">totalScore</span> <span class="o">=</span> <span class="nb">tostring</span><span class="p">(</span><span class="n">reviewScore</span><span class="p">)</span>
+</pre></div>
+</li>
+<li>
+<p>Use <code>tonumber</code> for Numbers.</p>
+
+<div class="highlight highlight-lua"><pre><span class="kd">local</span> <span class="n">inputValue</span> <span class="o">=</span> <span class="s1">'</span><span class="s">4'</span>
+
+<span class="c1">-- bad</span>
+<span class="kd">local</span> <span class="n">val</span> <span class="o">=</span> <span class="n">inputValue</span> <span class="o">*</span> <span class="mi">1</span>
+
+<span class="c1">-- bad</span>
+<span class="kd">local</span> <span class="n">val</span> <span class="o">=</span> <span class="nb">tonumber</span><span class="p">(</span><span class="n">inputValue</span><span class="p">)</span>
+</pre></div>
+
+<p><strong><a href="#TOC">[⬆]</a></strong></p>
+</li>
+</ul><h2>
+<a name="naming-conventions" class="anchor" href="#naming-conventions"><span class="octicon octicon-link"></span></a><a name="naming-conventions">Naming Conventions</a>
+</h2>
+
+<ul>
+<li>
+<p>Avoid single letter names. Be descriptive with your naming. You can get
+away with single-letter names when they are variables in loops.</p>
+
+<div class="highlight highlight-lua"><pre><span class="c1">-- bad</span>
+<span class="kd">local</span> <span class="k">function</span> <span class="nf">q</span><span class="p">()</span> 
+  <span class="c1">-- ...stuff...</span>
+<span class="k">end</span>
+
+<span class="c1">-- good</span>
+<span class="kd">local</span> <span class="k">function</span> <span class="nf">query</span><span class="p">()</span> 
+  <span class="c1">-- ..stuff..</span>
+<span class="k">end</span>
+</pre></div>
+</li>
+<li>
+<p>Use underscores for ignored variables in loops.</p>
+
+<div class="highlight highlight-lua"><pre><span class="c1">--good</span>
+<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">name</span> <span class="k">in</span> <span class="nb">pairs</span><span class="p">(</span><span class="n">names</span><span class="p">)</span> <span class="k">do</span>
+  <span class="c1">-- ...stuff...</span>
+<span class="k">end</span>
+</pre></div>
+</li>
+<li>
+<p>Use snake_case when naming objects, functions, and instances. Tend towards
+verbosity if unsure about naming.</p>
+
+<div class="highlight highlight-lua"><pre><span class="c1">-- bad</span>
+<span class="kd">local</span> <span class="n">OBJEcttsssss</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="kd">local</span> <span class="n">thisIsMyObject</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="kd">local</span> <span class="n">this</span><span class="o">-</span><span class="n">is</span><span class="o">-</span><span class="n">my</span><span class="o">-</span><span class="n">object</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="kd">local</span> <span class="n">c</span> <span class="o">=</span> <span class="k">function</span><span class="p">()</span>
+  <span class="c1">-- ...stuff...</span>
+<span class="k">end</span>
+
+<span class="c1">-- good</span>
+<span class="kd">local</span> <span class="n">this_is_my_object</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="kd">local</span> <span class="k">function</span> <span class="nf">do_that_thing</span><span class="p">()</span>
+  <span class="c1">-- ...stuff...</span>
+<span class="k">end</span>
+</pre></div>
+</li>
+<li>
+<p>Use PascalCase for factories.</p>
+
+<div class="highlight highlight-lua"><pre><span class="c1">-- bad</span>
+<span class="kd">local</span> <span class="n">player</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">'</span><span class="s">player'</span><span class="p">)</span>
+
+<span class="c1">-- good</span>
+<span class="kd">local</span> <span class="n">Player</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">'</span><span class="s">player'</span><span class="p">)</span>
+<span class="kd">local</span> <span class="n">me</span> <span class="o">=</span> <span class="n">Player</span><span class="p">({</span> <span class="n">name</span> <span class="o">=</span> <span class="s1">'</span><span class="s">Jack'</span> <span class="p">})</span>
+</pre></div>
+
+<p><strong><a href="#TOC">[⬆]</a></strong></p>
+</li>
+<li>
+<p>Use <code>is</code> or <code>has</code> for boolean-returning functions that are part of tables.</p>
+
+<div class="highlight highlight-lua"><pre><span class="c1">--bad</span>
+<span class="kd">local</span> <span class="k">function</span> <span class="nf">evil</span><span class="p">(</span><span class="n">alignment</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">alignment</span> <span class="o">&lt;</span> <span class="mi">100</span>
+<span class="k">end</span>
+
+<span class="c1">--good</span>
+<span class="kd">local</span> <span class="k">function</span> <span class="nf">is_evil</span><span class="p">(</span><span class="n">alignment</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">alignment</span> <span class="o">&lt;</span> <span class="mi">100</span>
+<span class="k">end</span>
+</pre></div>
+</li>
+</ul><h2>
+<a name="modules" class="anchor" href="#modules"><span class="octicon octicon-link"></span></a><a name="modules">Modules</a>
+</h2>
+
+<ul>
+<li>The module should return a table or function.</li>
+<li>The module should not use the global namespace for anything ever. The
+module should be a closure.</li>
+<li>
+<p>The file should be named like the module.</p>
+
+<div class="highlight highlight-lua"><pre><span class="c1">-- thing.lua</span>
+<span class="kd">local</span> <span class="n">thing</span> <span class="o">=</span> <span class="p">{</span> <span class="p">}</span>
+
+<span class="kd">local</span> <span class="n">meta</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="n">__call</span> <span class="o">=</span> <span class="k">function</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">vars</span><span class="p">)</span>
+    <span class="nb">print</span> <span class="n">key</span>
+  <span class="k">end</span>
+<span class="p">}</span>
+
+<span class="k">return</span> <span class="nb">setmetatable</span><span class="p">(</span><span class="n">thing</span><span class="p">,</span> <span class="n">meta</span><span class="p">)</span>
+</pre></div>
+</li>
+<li>
+<p>Note that modules are <a href="http://lua-users.org/wiki/TheEssenceOfLoadingCode">loaded as singletons</a>
+and therefore should usually be factories (a function returning a new instance of a table)
+unless static (like utility libraries.)</p>
+
+<p><strong><a href="#TOC">[⬆]</a></strong></p>
+</li>
+</ul><h2>
+<a name="file-structure" class="anchor" href="#file-structure"><span class="octicon octicon-link"></span></a><a name="file-structrure">File Structure</a>
+</h2>
+
+<ul>
+<li>Files should be named in all lowercase.</li>
+<li>Lua files should be in a top-level <code>src</code> folder. The main library file should 
+be called <code>modulename.lua</code>.</li>
+<li>Rockspecs, license, readme, etc should be in the top level.</li>
+<li>Tests should be in a top-level spec folder.</li>
+<li>Executables should be in a top-level bin folder.</li>
+<li>
+<p>Example:</p>
+
+<pre><code>./my_module
+  bin/
+    script.sh
+
+  spec/
+    my_module_spec.lua
+    some_file.lua
+
+  src/
+    my_module.lua
+    some_file.lua
+
+  README.md
+  LICENSE.md
+</code></pre>
+</li>
+</ul><h2>
+<a name="testing" class="anchor" href="#testing"><span class="octicon octicon-link"></span></a><a name="testing">Testing</a>
+</h2>
+
+<ul>
+<li>Use <a href="olivinelabs.com/busted">busted</a> and write lots of tests in a /spec 
+folder. Separate tests by module.</li>
+<li>Use descriptive <code>describe</code> and <code>it</code> blocks so it's obvious to see what
+precisely is failing.</li>
+<li>Test interfaces. Don't test private methods. If you need to test something
+that is private, it probably shouldn't be private in the first place.</li>
+<li>
+<p>Example:</p>
+
+<pre><code>./my_module
+  bin/
+    script.sh
+
+  spec/
+    my_module_spec.lua
+
+    util/
+      formatters_spec.lua
+
+  src/
+    my_module.lua
+
+    util/
+      formatters.lua
+
+  README.md
+  LICENSE.md
+</code></pre>
+
+<p><strong><a href="#TOC">[⬆]</a></strong></p>
+</li>
+</ul><h2>
+<a name="contributors" class="anchor" href="#contributors"><span class="octicon octicon-link"></span></a><a name="contributors">Contributors</a>
+</h2>
+
+<ul>
+<li>
+<p><a href="https://github.com/Olivine-Labs/lua-style-guide/graphs/contributors">View contributors</a></p>
+
+<p><strong><a href="#TOC">[⬆]</a></strong></p>
+</li>
+</ul><h2>
+<a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a><a name="license">License</a>
+</h2>
+
+<ul>
+<li>Released under CC0 (Public Domain).
+Information can be found at <a href="http://creativecommons.org/publicdomain/zero/1.0/">http://creativecommons.org/publicdomain/zero/1.0/</a>.</li>
+</ul><p><strong><a href="#TOC">[⬆]</a></strong></p>
+      </section>
+      <footer>
+        <p><small>Hosted on <a href="http://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+		
+  </body>
+</html>
