@@ -116,8 +116,8 @@ you find any mistakes or typos.
     ```lua
     -- nils don't count
     local list = {}
-    list[0] = nil
-    list[1] = 'item'
+    list[1] = nil
+    list[2] = 'item'
 
     print(#list) -- 0
     print(select('#', list)) -- 1
