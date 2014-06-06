@@ -440,7 +440,7 @@ you find any mistakes or typos.
 ## <a name='blocks'>Blocks</a>
 
   - Single line blocks are okay for *small* statements. Try to keep lines to 80 characters.
-    Indent if lines they overflow past the limit.
+    Indent lines if they overflow past the limit.
 
     ```lua
     -- good
