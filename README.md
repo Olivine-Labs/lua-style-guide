@@ -652,7 +652,7 @@ you find any mistakes or typos.
     -- bad
     local val = inputValue * 1
 
-    -- bad
+    -- good
     local val = tonumber(inputValue)
     ```
 
