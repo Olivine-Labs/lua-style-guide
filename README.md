@@ -789,7 +789,7 @@ you find any mistakes or typos.
 
 ## <a name='testing'>Testing</a>
 
-  - Use [busted](olivinelabs.com/busted) and write lots of tests in a /spec 
+  - Use [busted](http://olivinelabs.com/busted) and write lots of tests in a /spec 
     folder. Separate tests by module.
   - Use descriptive `describe` and `it` blocks so it's obvious to see what
     precisely is failing.
