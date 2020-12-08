@@ -766,8 +766,8 @@ you find any mistakes or typos.
   - Lua files should be in a top-level `src` folder. The main library file should 
     be called `modulename.lua`.
   - Rockspecs, license, readme, etc should be in the top level.
-  - Tests should be in a top-level spec folder.
-  - Executables should be in a top-level bin folder.
+  - Tests should be in a top-level `spec` folder.
+  - Executables should be in a top-level `bin` folder.
   - Example:
 
     ```
