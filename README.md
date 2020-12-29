@@ -155,10 +155,10 @@ you find any mistakes or typos.
     local name = 'Bob Parr'
 
     -- bad
-    local fullName = "Bob " .. self.lastName
+    local full_name = "Bob " .. self.last_name
 
     -- good
-    local fullName = 'Bob ' .. self.lastName
+    local full_name = 'Bob ' .. self.last_name
     ```
 
   - Strings longer than 80 characters should be written across multiple lines 
@@ -166,10 +166,10 @@ you find any mistakes or typos.
 
     ```lua
     -- bad
-    local errorMessage = 'This is a super long error that was thrown because of Batman. When you stop to think about how Batman had anything to do with this, you would get nowhere fast.'
+    local error_message = 'This is a super long error that was thrown because of Batman. When you stop to think about how Batman had anything to do with this, you would get nowhere fast.'
 
     -- bad
-    local errorMessage = 'This is a super long error that \
+    local error_message = 'This is a super long error that \
     was thrown because of Batman. \
     When you stop to think about \
     how Batman had anything to do \
@@ -178,7 +178,7 @@ you find any mistakes or typos.
 
 
     -- bad
-    local errorMessage = [[This is a super long error that
+    local error_message = [[This is a super long error that
       was thrown because of Batman.
       When you stop to think about
       how Batman had anything to do
@@ -186,7 +186,7 @@ you find any mistakes or typos.
       fast.]]
 
     -- good
-    local errorMessage = 'This is a super long error that ' ..
+    local error_message = 'This is a super long error that ' ..
       'was thrown because of Batman. ' ..
       'When you stop to think about ' ..
       'how Batman had anything to do ' ..
@@ -266,10 +266,10 @@ you find any mistakes or typos.
     }
 
     -- bad
-    local isJedi = luke['jedi']
+    local is_jedi = luke['jedi']
 
     -- good
-    local isJedi = luke.jedi
+    local is_jedi = luke.jedi
     ```
 
   - Use subscript notation `[]` when accessing properties with a variable
@@ -281,11 +281,11 @@ you find any mistakes or typos.
       age = 28
     }
 
-    local function getProp(prop) 
+    local function get_prop(prop)
       return luke[prop]
     end
 
-    local isJedi = getProp('jedi')
+    local is_jedi = get_prop('jedi')
     ```
 
     **[[⬆]](#TOC)**
@@ -315,7 +315,7 @@ you find any mistakes or typos.
 
       //..other stuff..
 
-      local name = getName()
+      local name = get_name()
 
       if name == 'test' then
         return false
@@ -326,7 +326,7 @@ you find any mistakes or typos.
 
     -- good
     local function good()
-      local name = getName()
+      local name = get_name()
 
       test()
       print('doing stuff..')
@@ -638,22 +638,22 @@ you find any mistakes or typos.
 
     ```lua
     -- bad
-    local totalScore = reviewScore .. ''
+    local total_score = review_score .. ''
 
     -- good
-    local totalScore = tostring(reviewScore)
+    local total_score = tostring(review_score)
     ```
 
   - Use `tonumber` for Numbers.
 
     ```lua
-    local inputValue = '4'
+    local input_value = '4'
 
     -- bad
-    local val = inputValue * 1
+    local val = input_value * 1
 
     -- good
-    local val = tonumber(inputValue)
+    local val = tonumber(input_value)
     ```
 
     **[[⬆]](#TOC)**
